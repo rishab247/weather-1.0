@@ -1,19 +1,25 @@
 package rishab.listview.com.weather10;
 
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
 import android.text.InputType;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -62,14 +68,26 @@ public class MainActivity extends AppCompatActivity {
         Weathertask weathertask = new Weathertask();
         weathertask.execute(city + "&unit=metric&appid=87fd8abcd03803d6a80293876f581e3e");
     }
+    public static int convertPixelsToDp(float px, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        int dp =  (int)(px / (metrics.densityDpi / 160f));
+        return dp;
+    }
 
     private void inputdialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setTitle("Change City");
         final EditText cityinput = new EditText(MainActivity.this);
-        cityinput.setInputType(InputType.TYPE_CLASS_TEXT);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(20,20,20,20);
+        cityinput.setLayoutParams(params);
+
+    cityinput.setSingleLine(true);
         cityinput.setHint("City Name,Country");
+
         builder.setView(cityinput);
+
         builder.setPositiveButton("Submit", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
